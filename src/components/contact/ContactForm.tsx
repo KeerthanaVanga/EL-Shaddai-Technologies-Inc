@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useToast } from "../ui/Toast";
 import { company } from "../../config/company";
+import { getStorage, setStorage, generateId, STORAGE_KEYS } from "../../data/adminData";
+import type { Submission } from "../../data/adminData";
 
 interface FormData {
   fullName: string;
@@ -38,7 +40,7 @@ export default function ContactForm() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) {
       toast("error", "Please fix the errors below.", "All required fields must be filled correctly.");
@@ -46,7 +48,18 @@ export default function ContactForm() {
     }
     setLoading(true);
     try {
-      await new Promise((res) => setTimeout(res, 1500)); // Simulated API call
+      await new Promise((res) => setTimeout(res, 1500));
+      const submission: Submission = {
+        id: generateId(),
+        fullName: form.fullName,
+        email: form.email,
+        phone: form.phone || undefined,
+        message: form.message,
+        submittedAt: new Date().toISOString(),
+        read: false,
+      };
+      const existing = getStorage<Submission[]>(STORAGE_KEYS.SUBMISSIONS, []);
+      setStorage(STORAGE_KEYS.SUBMISSIONS, [...existing, submission]);
       toast("success", "Message sent!", "We'll get back to you within 24 hours.");
       setForm({ fullName: "", email: "", phone: "", message: "" });
     } catch {

@@ -10,23 +10,27 @@ import ProductsPage from "./pages/ProductsPage";
 import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 const router = createBrowserRouter([
+  // ── Public site (with navbar + footer) ──
   {
     path: "/",
     element: <RootLayout />,
     children: [
-      { index: true,         element: <HomePage /> },
-      { path: "about",       element: <AboutPage /> },
-      { path: "services",    element: <ServicesPage /> },
-      { path: "products",    element: <ProductsPage /> },
-      { path: "careers",     element: <CareersPage /> },
-      { path: "why-us",      element: <WhyUsPage /> },
-      { path: "contact",     element: <ContactPage /> },
-      { path: "admin",       element: <AdminLoginPage /> },
-      { path: "*",           element: <NotFoundPage /> },
+      { index: true,      element: <HomePage /> },
+      { path: "about",    element: <AboutPage /> },
+      { path: "services", element: <ServicesPage /> },
+      { path: "products", element: <ProductsPage /> },
+      { path: "careers",  element: <CareersPage /> },
+      { path: "why-us",   element: <WhyUsPage /> },
+      { path: "contact",  element: <ContactPage /> },
+      { path: "*",        element: <NotFoundPage /> },
     ],
   },
+  // ── Admin (standalone, no public navbar/footer) ──
+  { path: "/admin",           element: <AdminLoginPage /> },
+  { path: "/admin/dashboard", element: <AdminDashboardPage /> },
 ]);
 
 export default function App() {

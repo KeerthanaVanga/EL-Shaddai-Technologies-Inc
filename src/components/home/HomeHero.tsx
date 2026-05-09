@@ -84,6 +84,12 @@ export default function HomeHero() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 w-full pointer-events-none">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="pointer-events-auto">
+            <div className="flex items-center gap-2 mb-5 animate-fade-in-up">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-white/20 bg-white/10 backdrop-blur-sm text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"/>
+                AI — Talent Intelligence
+              </span>
+            </div>
             <p className="text-xs font-bold tracking-[0.3em] uppercase mb-5 animate-fade-in-up" style={{ color: company.colors.accent }}>
               {company.tagline}
             </p>
@@ -118,8 +124,10 @@ export default function HomeHero() {
              </div>
              {/* Subtitle */}
              <h2 className="text-3xl xl:text-4xl font-light italic text-white/80 relative z-10 text-right leading-tight max-w-lg">
-                Building High-Performance <br/> 
+                Building High-Performance <br/>
                 <span className="font-bold not-italic" style={{ color: company.colors.accent }}>IT Talent Pipelines</span>
+                <br/>
+                <span className="text-lg font-semibold not-italic text-white/60 tracking-wide">Powered by AI — Talent Intelligence</span>
              </h2>
           </div>
         </div>

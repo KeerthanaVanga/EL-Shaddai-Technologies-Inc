@@ -9,8 +9,8 @@ export const company = {
   headline: "EL-Shaddai\nTechnologies Inc",
   description:
     "Connecting America's top businesses with exceptional technology professionals — fast, reliably, and with care.",
-  phone: "+1 732-913-1541",
-  email: "contact@elshaddai.com",
+  phone: "+91 7323059938",
+  email: "shg@el-shaddaitechnologies.com",
   website: "https://el-shaddaitechnologies.com",
 
   logoUrl: "/elsaddai.jpeg",

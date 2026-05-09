@@ -13,11 +13,12 @@ export default function HomeCTA() {
       />
       
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
+        <p className="text-xs font-bold tracking-[0.25em] uppercase mb-3 text-white/50">AI — Talent Intelligence</p>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">
           Ready to Build Your Dream IT Team?
         </h2>
         <p className="text-gray-300 md:text-lg mb-8 max-w-2xl mx-auto">
-          Let's discuss how {company.name} can help you find the right talent at the right time.
+          Let's discuss how {company.name} and our AI — Talent Intelligence platform can help you find the right talent at the right time.
         </p>
         
         <Link

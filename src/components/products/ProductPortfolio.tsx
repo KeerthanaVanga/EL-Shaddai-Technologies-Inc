@@ -1,16 +1,12 @@
 import { company } from "../../config/company";
 import SectionHeader from "../ui/SectionHeader";
 import FadeIn from "../ui/FadeIn";
-
-interface Product {
-  title: string;
-  description: string;
-  icon: string;
-}
+import { getStorage, STORAGE_KEYS, DEFAULT_PRODUCTS } from "../../data/adminData";
+import type { Product } from "../../data/adminData";
 
 export default function ProductPortfolio() {
-  const { items, comingSoonMessage } = company.products;
-  const products = items as Product[];
+  const { comingSoonMessage } = company.products;
+  const products: Product[] = getStorage<Product[]>(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
 
   return (
     <section className="py-20 bg-gray-50">
@@ -38,10 +34,18 @@ export default function ProductPortfolio() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((p, i) => (
-              <FadeIn key={p.title} delay={i * 80} direction="up">
+              <FadeIn key={p.id} delay={i * 80} direction="up">
                 <div className="bg-white rounded-2xl p-7 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full">
-                  <span className="text-3xl block mb-4">{p.icon}</span>
-                  <h3 className="font-black text-gray-900 mb-2">{p.title}</h3>
+                  <span className="text-3xl block mb-4">📦</span>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-black text-gray-900">{p.name}</h3>
+                    {p.status === "coming-soon" && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 uppercase tracking-wide">
+                        Soon
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs font-semibold text-gray-400 mb-2">{p.category}</p>
                   <p className="text-sm text-gray-500 leading-relaxed">{p.description}</p>
                 </div>
               </FadeIn>

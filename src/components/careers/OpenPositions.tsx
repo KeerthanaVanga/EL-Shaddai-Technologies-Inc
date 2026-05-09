@@ -2,17 +2,11 @@ import { Link } from "react-router-dom";
 import { company } from "../../config/company";
 import SectionHeader from "../ui/SectionHeader";
 import FadeIn from "../ui/FadeIn";
-
-interface Position {
-  title: string;
-  department: string;
-  location: string;
-  type: string;
-  requirements?: string;
-}
+import { getStorage, STORAGE_KEYS, DEFAULT_JOBS } from "../../data/adminData";
+import type { Job } from "../../data/adminData";
 
 export default function OpenPositions() {
-  const positions = company.careers.openPositions as Position[];
+  const positions: Job[] = getStorage<Job[]>(STORAGE_KEYS.JOBS, DEFAULT_JOBS);
 
   return (
     <section id="open-positions" className="py-24 bg-slate-50">
@@ -50,9 +44,9 @@ export default function OpenPositions() {
         ) : (
           <div className="space-y-6 mt-12">
             {positions.map((p, i) => (
-              <FadeIn key={p.title} delay={i * 100}>
+              <FadeIn key={p.id} delay={i * 100}>
                 <div className="bg-white rounded-2xl p-8 border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col gap-5">
-                  
+
                   {/* Header Row */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <h3 className="text-xl font-black text-slate-900">{p.title}</h3>
@@ -71,16 +65,15 @@ export default function OpenPositions() {
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: company.colors.primary }}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                       {p.location}
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-600 font-medium">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: company.colors.primary }}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                      {p.type}
-                    </div>
                   </div>
 
-                  {/* Requirements Text */}
+                  {/* Description + Requirements */}
+                  {p.description && (
+                    <p className="text-sm text-slate-600 leading-relaxed">{p.description}</p>
+                  )}
                   {p.requirements && (
-                    <p className="text-sm text-slate-500 font-medium my-2">
-                      {p.requirements}
+                    <p className="text-sm text-slate-500 font-medium">
+                      <span className="font-bold text-slate-700">Skills:</span> {p.requirements}
                     </p>
                   )}
 
@@ -94,7 +87,7 @@ export default function OpenPositions() {
                       Apply Now
                     </Link>
                   </div>
-                  
+
                 </div>
               </FadeIn>
             ))}

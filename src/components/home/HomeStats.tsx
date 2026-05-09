@@ -7,7 +7,7 @@ export default function HomeStats() {
       <section className="py-7" style={{ backgroundColor: company.colors.primary }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-white font-black text-xl mb-1">Empowering Businesses with Top-Tier IT Talent</p>
-          <p className="text-white/80 text-sm max-w-lg mx-auto">From startups to Fortune 500s, we match exceptional technology professionals with companies that need them most.</p>
+          <p className="text-white/80 text-sm max-w-lg mx-auto">From startups to Fortune 500s, we leverage <span className="font-bold text-white">AI — Talent Intelligence</span> to match exceptional technology professionals with companies that need them most.</p>
         </div>
       </section>
       {/* Stats row */}

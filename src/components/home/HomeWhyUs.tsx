@@ -3,6 +3,7 @@ import { company } from "../../config/company";
 
 export default function HomeWhyUs() {
   const points = [
+    "AI — Talent Intelligence for smarter, faster candidate matching",
     "Deep technical expertise across all IT domains",
     "Pre-vetted talent pool of 10,000+ candidates",
     "Average placement time of 72 hours",

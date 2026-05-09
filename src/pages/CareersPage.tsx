@@ -1,13 +1,13 @@
-import { company } from "../config/company";
-import PageHero from "../components/ui/PageHero";
+import CareersHero from "../components/careers/CareersHero";
+import WeAreHiring from "../components/careers/WeAreHiring";
 import WhyWorkHere from "../components/careers/WhyWorkHere";
 import OpenPositions from "../components/careers/OpenPositions";
 
 export default function CareersPage() {
-  const c = company.careers;
   return (
     <main>
-      <PageHero tagline={c.tagline} headline={c.headline} description={c.description} bgImage={company.careersHeroImage} />
+      <CareersHero />
+      <WeAreHiring />
       <WhyWorkHere />
       <OpenPositions />
     </main>

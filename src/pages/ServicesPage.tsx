@@ -1,19 +1,17 @@
-import { company } from "../config/company";
-import PageHero from "../components/ui/PageHero";
+import ServicesHero from "../components/services/ServicesHero";
+import ServicesBannerImage from "../components/services/ServicesBannerImage";
 import ServiceCards from "../components/services/ServiceCards";
 import TrustedBy from "../components/services/TrustedBy";
+import ServicesCTA from "../components/services/ServicesCTA";
 
 export default function ServicesPage() {
   return (
     <main>
-      <PageHero
-        tagline="What We Offer"
-        headline={"Comprehensive IT\nStaffing Services"}
-        description="From contract placements to executive search, we deliver tailored talent solutions that align with your business objectives."
-        bgImage={company.servicesHeroImage}
-      />
+      <ServicesHero />
+      <ServicesBannerImage />
       <ServiceCards />
       <TrustedBy />
+      <ServicesCTA />
     </main>
   );
 }

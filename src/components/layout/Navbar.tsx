@@ -14,11 +14,11 @@ export default function Navbar() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/96 backdrop-blur-md shadow-lg" : "bg-white shadow-sm"}`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20 md:h-24">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 shrink-0" onClick={() => setMenuOpen(false)}>
           {company.logoUrl ? (
-            <img src={company.logoUrl} alt={company.name} className="h-9 w-auto" />
+            <img src={company.logoUrl} alt={company.name} className="h-12 md:h-16 w-auto object-contain" />
           ) : (
             <div className="flex items-center gap-2">
               <div className="relative w-8 h-8">
@@ -33,37 +33,29 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <ul className="hidden lg:flex items-center gap-0.5">
+        <ul className="hidden lg:flex items-center gap-2 xl:gap-6">
           {company.navLinks.map((link) => (
             <li key={link.href}>
               <NavLink
                 to={link.href}
                 end={link.href === "/"}
                 className={({ isActive }) =>
-                  `relative px-3.5 py-2 text-sm font-medium rounded-md transition-colors duration-150 group ${
-                    isActive ? "text-[#8B1A1A]" : "text-gray-600 hover:text-gray-900"
+                  `relative px-3 py-2 text-[15px] font-semibold transition-colors duration-150 ${
+                    isActive ? "text-[#E11D48]" : "text-gray-900 hover:text-[#E11D48]"
                   }`
                 }
               >
-                {({ isActive }) => (
-                  <>
-                    {link.label}
-                    <span
-                      className={`absolute bottom-0.5 left-3.5 right-3.5 h-0.5 rounded-full transition-all duration-300 ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-30"}`}
-                      style={{ backgroundColor: company.colors.primary }}
-                    />
-                  </>
-                )}
+                {link.label}
               </NavLink>
             </li>
           ))}
         </ul>
 
         {/* Admin CTA */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:block ml-2">
           <Link
             to="/admin"
-            className="px-5 py-2 text-sm font-bold text-white rounded-md transition-all duration-200 hover:opacity-90 hover:shadow-md"
+            className="px-6 py-2.5 text-sm font-bold text-white rounded-md transition-all duration-200 hover:opacity-90 hover:shadow-md"
             style={{ backgroundColor: company.colors.dark }}
           >
             Admin

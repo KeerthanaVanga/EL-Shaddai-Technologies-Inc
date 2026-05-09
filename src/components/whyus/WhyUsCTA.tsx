@@ -11,8 +11,8 @@ export default function WhyUsCTA() {
           <span style={{ color: company.colors.accent }}>{w.ctaAccent}</span>
         </h2>
         <p className="text-gray-300 mb-10 text-lg leading-relaxed">{w.ctaDescription}</p>
-        <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-4 font-bold text-white rounded-md transition-all duration-200 hover:shadow-2xl hover:-translate-y-0.5" style={{ backgroundColor: company.colors.primary }}>
-          Get in Touch Today →
+        <Link to="/contact" className="inline-flex items-center gap-2 px-10 py-4 font-bold text-white rounded-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1" style={{ backgroundColor: company.colors.primary }}>
+          Get in Touch Today
         </Link>
       </div>
     </section>

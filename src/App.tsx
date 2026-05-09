@@ -9,6 +9,7 @@ import CareersPage from "./pages/CareersPage";
 import ProductsPage from "./pages/ProductsPage";
 import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import AdminLoginPage from "./pages/AdminLoginPage";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
       { path: "careers",     element: <CareersPage /> },
       { path: "why-us",      element: <WhyUsPage /> },
       { path: "contact",     element: <ContactPage /> },
-      { path: "admin",       element: <NotFoundPage /> },
+      { path: "admin",       element: <AdminLoginPage /> },
       { path: "*",           element: <NotFoundPage /> },
     ],
   },

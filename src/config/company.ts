@@ -21,7 +21,7 @@ export const company = {
   careersHeroImage: "/Home/HeroHiringImage.png",
   aboutHeroImage: "/About/HeroBannerImage.jpeg",
   contactHeroImage: "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1920&q=80",
-  servicesHeroImage: "/Home/HeroSectionImage.jpeg",
+  servicesHeroImage: "/Career/ai6image.jpg",
   whyUsHeroImage: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1920&q=80",
   productsHeroImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80",
 

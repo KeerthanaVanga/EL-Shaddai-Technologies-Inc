@@ -1,10 +1,10 @@
-import { company } from "../../config/company";
+
 
 export default function ServicesBannerImage() {
   return (
     <section className="relative h-64 md:h-80 w-full overflow-hidden">
       <img 
-        src={company.servicesHeroImage} 
+        src="/Career/ai7image.jpg"
         alt="Expert talent matching" 
         className="w-full h-full object-cover"
       />

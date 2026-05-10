@@ -2,7 +2,7 @@ export default function BannerImage() {
   return (
     <section className="relative h-64 md:h-96 w-full overflow-hidden">
       <img 
-        src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1920&q=80" 
+        src="/Career/ai8image.jpg" 
         alt="Team building partnerships" 
         className="w-full h-full object-cover"
       />

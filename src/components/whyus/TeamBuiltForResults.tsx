@@ -17,7 +17,7 @@ export default function TeamBuiltForResults() {
           <FadeIn delay={100} direction="up">
             <div className="relative rounded-2xl overflow-hidden shadow-lg h-64 sm:h-80 group">
               <img 
-                src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80" 
+                src="/Career/ai4image.jpg" 
                 alt="Collaborative Team Culture" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />

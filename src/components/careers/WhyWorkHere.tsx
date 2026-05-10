@@ -45,7 +45,7 @@ export default function WhyWorkHere() {
           <FadeIn direction="right" delay={100}>
             <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[400px] lg:h-[500px]">
               <img
-                src={company.servicesHeroImage}
+                src="/Career/ai3image.jpg"
                 alt="IT professionals"
                 className="w-full h-full object-cover"
               />

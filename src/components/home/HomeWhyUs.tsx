@@ -62,12 +62,12 @@ export default function HomeWhyUs() {
           <div className="relative animate-fade-in-left" style={{ animationDelay: "0.2s" }}>
             <div className="flex flex-col gap-6">
               <img 
-                src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80" 
+                src="/Career/ai9image.jpg" 
                 alt="Team meeting" 
                 className="w-full h-64 object-cover rounded-xl shadow-lg"
               />
               <img 
-                src="/Home/HeroSectionImage.jpeg" 
+                src="/Career/a10image.jpg" 
                 alt="IT professionals in server room" 
                 className="w-full h-64 object-cover rounded-xl shadow-lg"
               />

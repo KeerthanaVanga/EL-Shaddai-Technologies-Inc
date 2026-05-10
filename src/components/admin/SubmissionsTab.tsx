@@ -1,50 +1,64 @@
 import { useState } from "react";
-import {
-  STORAGE_KEYS,
-  getStorage,
-  setStorage,
-  type Submission,
-} from "../../data/adminData";
 import { useToast } from "../ui/Toast";
 import { Modal, TabHeader, EmptyState } from "./AdminShared";
+import {
+  useGetAllSubmissions,
+  useDeleteSubmission,
+  useMarkSubmissionAsRead,
+} from "../../hooks/useSubmissions";
 
 export default function SubmissionsTab() {
   const { toast } = useToast();
-  const [submissions, setSubmissions] = useState<Submission[]>(() =>
-    getStorage<Submission[]>(STORAGE_KEYS.SUBMISSIONS, [])
-  );
+  const { data: submissionsResponse, isLoading, error } = useGetAllSubmissions();
+  const deleteSubmissionMutation = useDeleteSubmission();
+  const markAsReadMutation = useMarkSubmissionAsRead();
+  
+  const submissions = submissionsResponse?.data || [];
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const unreadCount = submissions.filter((s) => !s.read).length;
+  const unreadCount = submissions.filter((s) => !s.isRead).length;
 
-  const persist = (updated: Submission[]) => {
-    setSubmissions(updated);
-    setStorage(STORAGE_KEYS.SUBMISSIONS, updated);
-  };
 
-  const toggleExpand = (id: string) => {
+  const toggleExpand = async (id: string) => {
     if (expandedId === id) {
       setExpandedId(null);
       return;
     }
     setExpandedId(id);
-    const updated = submissions.map((s) =>
-      s.id === id ? { ...s, read: true } : s
-    );
-    persist(updated);
+    
+    const submission = submissions.find(s => s.id === id);
+    if (submission && !submission.isRead) {
+      try {
+        await markAsReadMutation.mutateAsync(id);
+        toast("success", "Submission marked as read.");
+      } catch (error) {
+        toast("error", "Failed to mark as read", error instanceof Error ? error.message : "Unknown error");
+      }
+    }
   };
 
-  const markAllRead = () => {
-    persist(submissions.map((s) => ({ ...s, read: true })));
+  const markAllRead = async () => {
+    const unreadSubmissions = submissions.filter(s => !s.isRead);
+    for (const submission of unreadSubmissions) {
+      try {
+        await markAsReadMutation.mutateAsync(submission.id);
+      } catch (error) {
+        console.error(`Failed to mark submission ${submission.id} as read:`, error);
+      }
+    }
     toast("success", "All submissions marked as read.");
   };
 
-  const handleDelete = (id: string) => {
-    persist(submissions.filter((s) => s.id !== id));
-    if (expandedId === id) setExpandedId(null);
-    toast("success", "Submission deleted.");
-    setDeleteId(null);
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteSubmissionMutation.mutateAsync(id);
+      if (expandedId === id) setExpandedId(null);
+      toast("success", "Submission deleted.");
+      setDeleteId(null);
+    } catch (error) {
+      toast("error", "Delete failed", error instanceof Error ? error.message : "Unknown error");
+    }
   };
 
   const formatDate = (iso: string) => {
@@ -86,7 +100,15 @@ export default function SubmissionsTab() {
           }
         />
 
-        {submissions.length === 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-sm text-slate-500">Loading submissions...</div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-sm text-red-500">Error loading submissions</div>
+          </div>
+        ) : submissions.length === 0 ? (
           <EmptyState
             icon={
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
@@ -102,19 +124,19 @@ export default function SubmissionsTab() {
               .slice()
               .sort(
                 (a, b) =>
-                  new Date(b.submittedAt).getTime() -
-                  new Date(a.submittedAt).getTime()
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
               )
               .map((sub) => (
                 <div key={sub.id} className="transition-colors">
                   {/* Row */}
                   <div
-                    className={`flex items-start gap-3 p-5 sm:p-6 cursor-pointer hover:bg-slate-50/60 transition-colors ${!sub.read ? "bg-blue-50/30" : ""}`}
+                    className={`flex items-start gap-3 p-5 sm:p-6 cursor-pointer hover:bg-slate-50/60 transition-colors ${!sub.isRead ? "bg-blue-50/30" : ""}`}
                     onClick={() => toggleExpand(sub.id)}
                   >
                     {/* Unread dot */}
                     <div className="flex-shrink-0 mt-1.5 w-2">
-                      {!sub.read && (
+                      {!sub.isRead && (
                         <span className="block w-2 h-2 rounded-full bg-blue-500" />
                       )}
                     </div>
@@ -136,7 +158,7 @@ export default function SubmissionsTab() {
                         {sub.message}
                       </p>
                       <p className="text-[11px] text-slate-400 mt-1">
-                        {formatDate(sub.submittedAt)}
+                        {formatDate(sub.createdAt)}
                       </p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
@@ -192,7 +214,7 @@ export default function SubmissionsTab() {
                           <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{sub.message}</p>
                         </div>
                         <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                          <span className="text-[11px] text-slate-400">{formatDate(sub.submittedAt)}</span>
+                          <span className="text-[11px] text-slate-400">{formatDate(sub.createdAt)}</span>
                           <a
                             href={`mailto:${sub.email}?subject=Re: Your inquiry`}
                             className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-[#0B1426] text-white rounded-md hover:bg-[#15233e] transition-colors"

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useToast } from "../ui/Toast";
+import { useCreateContactSubmission } from "../../hooks/useContact";
+import type { CreateContactPayload } from "../../api/contact.api";
 import { company } from "../../config/company";
-import { getStorage, setStorage, generateId, STORAGE_KEYS } from "../../data/adminData";
-import type { Submission } from "../../data/adminData";
 
 interface FormData {
   fullName: string;
@@ -19,13 +19,14 @@ interface FormErrors {
 
 export default function ContactForm() {
   const { toast } = useToast();
+  const createContactMutation = useCreateContactSubmission();
+  
   const [form, setForm] = useState<FormData>({ fullName: "", email: "", phone: "", message: "" });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [loading, setLoading] = useState(false);
 
   const validate = (): boolean => {
     const e: FormErrors = {};
-    if (!form.fullName.trim()) e.fullName = "Full name is required.";
+    if (!form.fullName.trim()) e.fullName = "Name is required.";
     if (!form.email.trim()) e.email = "Email is required.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email address.";
     if (!form.message.trim()) e.message = "Message is required.";
@@ -46,26 +47,14 @@ export default function ContactForm() {
       toast("error", "Please fix the errors below.", "All required fields must be filled correctly.");
       return;
     }
-    setLoading(true);
+
     try {
-      await new Promise((res) => setTimeout(res, 1500));
-      const submission: Submission = {
-        id: generateId(),
-        fullName: form.fullName,
-        email: form.email,
-        phone: form.phone || undefined,
-        message: form.message,
-        submittedAt: new Date().toISOString(),
-        read: false,
-      };
-      const existing = getStorage<Submission[]>(STORAGE_KEYS.SUBMISSIONS, []);
-      setStorage(STORAGE_KEYS.SUBMISSIONS, [...existing, submission]);
-      toast("success", "Message sent!", "We'll get back to you within 24 hours.");
+      await createContactMutation.mutateAsync(form as CreateContactPayload);
+      toast("success", "Message sent successfully!", "We'll get back to you within 24 hours.");
       setForm({ fullName: "", email: "", phone: "", message: "" });
-    } catch {
-      toast("error", "Something went wrong.", "Please try again or contact us directly.");
-    } finally {
-      setLoading(false);
+      setErrors({});
+    } catch (error) {
+      toast("error", "Failed to send message", error instanceof Error ? error.message : "Please try again later.");
     }
   };
 
@@ -130,18 +119,17 @@ export default function ContactForm() {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={createContactMutation.isPending}
           className="w-full py-4 text-sm font-bold text-white rounded-md transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           style={{ backgroundColor: company.colors.primary }}
         >
-          {loading ? (
-            <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Sending…</>
-          ) : (
-            <>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Send Message
-            </>
+          {createContactMutation.isPending && (
+            <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
           )}
+          {createContactMutation.isPending ? "Sending..." : "Send Message"}
         </button>
       </form>
     </div>

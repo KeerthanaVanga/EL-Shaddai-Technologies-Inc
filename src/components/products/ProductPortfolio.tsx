@@ -1,12 +1,12 @@
 import { company } from "../../config/company";
 import SectionHeader from "../ui/SectionHeader";
 import FadeIn from "../ui/FadeIn";
-import { getStorage, STORAGE_KEYS, DEFAULT_PRODUCTS } from "../../data/adminData";
-import type { Product } from "../../data/adminData";
+import { useGetAllProducts } from "../../hooks/useProducts";
 
 export default function ProductPortfolio() {
+  const { data: productsResponse, isLoading, error } = useGetAllProducts();
+  const products = productsResponse?.data || [];
   const { comingSoonMessage } = company.products;
-  const products: Product[] = getStorage<Product[]>(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS);
 
   return (
     <section className="py-20 bg-gray-50">
@@ -18,7 +18,33 @@ export default function ProductPortfolio() {
           />
         </FadeIn>
 
-        {products.length === 0 ? (
+        {isLoading ? (
+          <FadeIn delay={100}>
+            <div className="max-w-xl mx-auto bg-white rounded-2xl border border-gray-100 p-16 text-center shadow-sm">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 animate-spin"
+                style={{ backgroundColor: `${company.colors.accent}20` }}
+              >
+                ⏳
+              </div>
+              <h3 className="text-xl font-black text-gray-900 mb-3">Loading Products...</h3>
+              <p className="text-gray-500 leading-relaxed text-sm">Fetching our product portfolio...</p>
+            </div>
+          </FadeIn>
+        ) : error ? (
+          <FadeIn delay={100}>
+            <div className="max-w-xl mx-auto bg-white rounded-2xl border border-red-100 p-16 text-center shadow-sm">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5"
+                style={{ backgroundColor: `${company.colors.accent}20` }}
+              >
+                ⚠️
+              </div>
+              <h3 className="text-xl font-black text-gray-900 mb-3">Error Loading Products</h3>
+              <p className="text-gray-500 leading-relaxed text-sm">Unable to load products at this time. Please try again later.</p>
+            </div>
+          </FadeIn>
+        ) : products.length === 0 ? (
           <FadeIn delay={100}>
             <div className="max-w-xl mx-auto bg-white rounded-2xl border border-gray-100 p-16 text-center shadow-sm">
               <div
@@ -39,13 +65,15 @@ export default function ProductPortfolio() {
                   <span className="text-3xl block mb-4">📦</span>
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-black text-gray-900">{p.name}</h3>
-                    {p.status === "coming-soon" && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-100 uppercase tracking-wide">
-                        Soon
+                    {p.tagline && (
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                        {p.tagline}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs font-semibold text-gray-400 mb-2">{p.category}</p>
+                  {p.features && (
+                    <p className="text-xs font-semibold text-gray-400 mb-2">{p.features}</p>
+                  )}
                   <p className="text-sm text-gray-500 leading-relaxed">{p.description}</p>
                 </div>
               </FadeIn>

@@ -1,41 +1,35 @@
 import { useState } from "react";
-import {
-  DEFAULT_PRODUCTS,
-  STORAGE_KEYS,
-  getStorage,
-  setStorage,
-  generateId,
-  type Product,
-} from "../../data/adminData";
 import { useToast } from "../ui/Toast";
 import { Modal, Field, inputCls, TabHeader, EmptyState } from "./AdminShared";
+import {
+  useGetAllProducts,
+  useCreateProduct,
+  useUpdateProduct,
+  useDeleteProduct,
+  type UpdateProductPayload,
+  type CreateProductPayload,
+} from "../../hooks/useProducts";
+import type { Product } from "../../api/products.api";
 
-const EMPTY_FORM: Omit<Product, "id" | "createdAt"> = {
+const EMPTY_FORM: CreateProductPayload = {
   name: "",
-  category: "",
+  tagline: "",
   description: "",
-  status: "active",
-};
-
-const STATUS_LABELS: Record<Product["status"], string> = {
-  active: "Active",
-  "coming-soon": "Coming Soon",
+  features: "",
 };
 
 export default function ProductsTab() {
   const { toast } = useToast();
-  const [products, setProducts] = useState<Product[]>(() =>
-    getStorage<Product[]>(STORAGE_KEYS.PRODUCTS, DEFAULT_PRODUCTS)
-  );
+  const { data: productsResponse, isLoading, error } = useGetAllProducts();
+  const createProductMutation = useCreateProduct();
+  const updateProductMutation = useUpdateProduct();
+  const deleteProductMutation = useDeleteProduct();
+  
+  const products = productsResponse?.data || [];
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [form, setForm] = useState<Omit<Product, "id" | "createdAt">>(EMPTY_FORM);
+  const [form, setForm] = useState<CreateProductPayload>(EMPTY_FORM);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-
-  const persist = (updated: Product[]) => {
-    setProducts(updated);
-    setStorage(STORAGE_KEYS.PRODUCTS, updated);
-  };
 
   const openAdd = () => {
     setEditingProduct(null);
@@ -47,47 +41,49 @@ export default function ProductsTab() {
     setEditingProduct(product);
     setForm({
       name: product.name,
-      category: product.category,
+      tagline: product.tagline || "",
       description: product.description,
-      status: product.status,
+      features: product.features || "",
     });
     setShowModal(true);
   };
 
-  const handleSave = () => {
-    if (!form.name.trim() || !form.category.trim()) {
-      toast("error", "Required fields missing", "Name and category are required.");
+  const handleSave = async () => {
+    if (!form.name.trim() || !form.description.trim()) {
+      toast("error", "Required fields missing", "Name and description are required.");
       return;
     }
-    if (editingProduct) {
-      persist(
-        products.map((p) =>
-          p.id === editingProduct.id ? { ...editingProduct, ...form } : p
-        )
-      );
-      toast("success", "Product updated successfully!");
-    } else {
-      persist([
-        ...products,
-        { id: generateId(), createdAt: new Date().toISOString(), ...form },
-      ]);
-      toast("success", "Product added successfully!");
+    
+    try {
+      if (editingProduct) {
+        await updateProductMutation.mutateAsync({ id: editingProduct.id, payload: form as UpdateProductPayload });
+        toast("success", "Product updated successfully!");
+      } else {
+        await createProductMutation.mutateAsync(form);
+        toast("success", "Product added successfully!");
+      }
+      setShowModal(false);
+    } catch (error) {
+      toast("error", "Operation failed", error instanceof Error ? error.message : "Unknown error");
     }
-    setShowModal(false);
   };
 
-  const handleDelete = (id: string) => {
-    persist(products.filter((p) => p.id !== id));
-    toast("success", "Product deleted.");
-    setDeleteId(null);
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProductMutation.mutateAsync(id);
+      toast("success", "Product deleted.");
+      setDeleteId(null);
+    } catch (error) {
+      toast("error", "Delete failed", error instanceof Error ? error.message : "Unknown error");
+    }
   };
 
   const f =
-    (field: keyof typeof form) =>
+    (field: keyof CreateProductPayload) =>
     (
       e: React.ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >
+      >,
     ) =>
       setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
@@ -111,7 +107,15 @@ export default function ProductsTab() {
           }
         />
 
-        {products.length === 0 ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-sm text-slate-500">Loading products...</div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="text-sm text-red-500">Error loading products</div>
+          </div>
+        ) : products.length === 0 ? (
           <EmptyState
             icon={<span className="text-2xl">📦</span>}
             message="No products listed yet."
@@ -135,19 +139,17 @@ export default function ProductsTab() {
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1.5">
                       <h3 className="text-sm font-bold text-slate-900">{product.name}</h3>
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide border ${
-                          product.status === "active"
-                            ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-                            : "bg-amber-50 text-amber-700 border-amber-100"
-                        }`}
-                      >
-                        {STATUS_LABELS[product.status]}
-                      </span>
+                      {product.tagline && (
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 uppercase tracking-wide">
+                          {product.tagline}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs text-slate-500 font-medium mb-1">
-                      {product.category}
-                    </p>
+                    {product.features && (
+                      <p className="text-xs text-slate-400 line-clamp-1">
+                        Features: {product.features}
+                      </p>
+                    )}
                     {product.description && (
                       <p className="text-xs text-slate-400 line-clamp-2">
                         {product.description}
@@ -192,15 +194,15 @@ export default function ProductsTab() {
                 className={inputCls}
               />
             </Field>
-            <Field label="Category *">
+            <Field label="Tagline">
               <input
-                value={form.category}
-                onChange={f("category")}
-                placeholder="e.g. Workforce Management"
+                value={form.tagline}
+                onChange={f("tagline")}
+                placeholder="e.g. The future of workforce management"
                 className={inputCls}
               />
             </Field>
-            <Field label="Description">
+            <Field label="Description *">
               <textarea
                 value={form.description}
                 onChange={f("description")}
@@ -209,22 +211,32 @@ export default function ProductsTab() {
                 className={`${inputCls} resize-none`}
               />
             </Field>
-            <Field label="Status">
-              <select value={form.status} onChange={f("status")} className={inputCls}>
-                <option value="active">Active</option>
-                <option value="coming-soon">Coming Soon</option>
-              </select>
+            <Field label="Features (comma-separated)">
+              <input
+                value={form.features || ""}
+                onChange={f("features")}
+                placeholder="e.g. Real-time analytics, AI-powered insights, Cloud-based"
+                className={inputCls}
+              />
             </Field>
             <div className="flex gap-3 pt-2">
               <button
                 onClick={handleSave}
-                className="flex-1 py-2.5 bg-[#0B1426] text-white text-sm font-bold rounded-lg hover:bg-[#15233e] transition-colors"
+                disabled={createProductMutation.isPending || updateProductMutation.isPending}
+                className="flex-1 py-2.5 bg-[#0B1426] text-white text-sm font-bold rounded-lg hover:bg-[#15233e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
+                {(createProductMutation.isPending || updateProductMutation.isPending) && (
+                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                )}
                 {editingProduct ? "Save Changes" : "Add Product"}
               </button>
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 py-2.5 border border-slate-200 text-slate-600 text-sm font-bold rounded-lg hover:bg-slate-50 transition-colors"
+                disabled={createProductMutation.isPending || updateProductMutation.isPending}
+                className="flex-1 py-2.5 border border-slate-200 text-slate-600 text-sm font-bold rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>

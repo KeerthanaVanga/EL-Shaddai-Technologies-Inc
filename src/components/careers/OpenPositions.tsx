@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { company } from "../../config/company";
 import SectionHeader from "../ui/SectionHeader";
 import FadeIn from "../ui/FadeIn";
-import { getStorage, STORAGE_KEYS, DEFAULT_JOBS } from "../../data/adminData";
-import type { Job } from "../../data/adminData";
+import { useGetAllJobsForCareers } from "../../hooks/useCareers";
 
 export default function OpenPositions() {
-  const positions: Job[] = getStorage<Job[]>(STORAGE_KEYS.JOBS, DEFAULT_JOBS);
+  const { data: jobs = [], isLoading, error } = useGetAllJobsForCareers();
+  const positions = jobs;
 
   return (
     <section id="open-positions" className="py-24 bg-slate-50">
@@ -19,7 +19,38 @@ export default function OpenPositions() {
           />
         </FadeIn>
 
-        {positions.length === 0 ? (
+        {isLoading ? (
+          <FadeIn delay={100} className="mt-12">
+            <div className="bg-white rounded-2xl border border-slate-100 p-16 text-center shadow-sm">
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 animate-spin">
+                ⏳
+              </div>
+              <h3 className="text-xl font-black text-slate-900 mb-2">Loading Positions...</h3>
+              <p className="text-slate-500 max-w-sm mx-auto text-sm leading-relaxed font-medium">
+                Fetching current job openings...
+              </p>
+            </div>
+          </FadeIn>
+        ) : error ? (
+          <FadeIn delay={100} className="mt-12">
+            <div className="bg-white rounded-2xl border border-red-100 p-16 text-center shadow-sm">
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5">
+                ⚠️
+              </div>
+              <h3 className="text-xl font-black text-slate-900 mb-2">Error Loading Positions</h3>
+              <p className="text-slate-500 mb-8 max-w-sm mx-auto text-sm leading-relaxed font-medium">
+                Unable to load job openings at this time. Please try again later.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold text-white rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                style={{ backgroundColor: company.colors.primary }}
+              >
+                Contact Our Recruiting Team
+              </Link>
+            </div>
+          </FadeIn>
+        ) : positions.length === 0 ? (
           <FadeIn delay={100} className="mt-12">
             <div className="bg-white rounded-2xl border border-slate-100 p-16 text-center shadow-sm">
               <div

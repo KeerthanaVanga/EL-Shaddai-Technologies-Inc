@@ -89,12 +89,12 @@ export default function HomeWhyUs() {
           >
             <div className="flex flex-col gap-6">
               <img
-                src="/ai-pro.jpeg"
+                src="/elshaddai_images/Why_Us_Section_Team_Meeting_Image.jpg"
                 alt="Team meeting"
                 className="w-full h-64 object-cover rounded-xl shadow-lg"
               />
               <img
-                src="/Career/a10image.jpg"
+                src="/elshaddai_images/Why_Us_Section_AI_Talent_Intelligence.jpg"
                 alt="IT professionals in server room"
                 className="w-full h-64 object-cover rounded-xl shadow-lg"
               />

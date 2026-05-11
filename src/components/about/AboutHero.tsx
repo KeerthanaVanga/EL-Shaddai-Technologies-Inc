@@ -12,7 +12,7 @@ export default function AboutHero() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-y-0 right-0 w-full lg:w-[60%]">
           <img
-            src="/Career/ai9image.jpg"
+            src="/elshaddai_images/About_Page_Hero_Our_Story.jpg"
             alt="About EL-Shaddai"
             className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
           />

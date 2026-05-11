@@ -16,15 +16,13 @@ export const company = {
   logoUrl: "/elsaddai.jpeg",
   logoFallback: "EL SHADDAI",
 
-  heroImage:
-    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop",
-  hiringImage:
-    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2670&auto=format&fit=crop",
-  careersHeroImage: "/Home/HeroHiringImage.png",
+  heroImage: "/elshaddai_images/Hero_Slider_Slide_1.jpg",
+  hiringImage: "/elshaddai_images/Hero_Slider_Slide_2.jpg",
+  careersHeroImage: "/elshaddai_images/Hero_Slider_Slide_4.jpg",
   aboutHeroImage: "/About/HeroBannerImage.jpeg",
   contactHeroImage:
     "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1920&q=80",
-  servicesHeroImage: "/Career/ai6image.jpg",
+  servicesHeroImage: "/elshaddai_images/Hero_Slider_Slide_3.jpg",
   whyUsHeroImage:
     "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=1920&q=80",
   productsHeroImage: "/marketing-ai.jpeg",

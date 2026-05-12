@@ -16,8 +16,8 @@ export const company = {
   logoUrl: "/elsaddai.jpeg",
   logoFallback: "EL SHADDAI",
 
-  heroImage: "/elshaddai_images/Hero_Slider_Slide_1.jpg",
-  hiringImage: "/elshaddai_images/Hero_Slider_Slide_2.jpg",
+  heroImage: "/marketing-ai.jpeg",
+  hiringImage: "/ai4.png",
   careersHeroImage: "/elshaddai_images/Hero_Slider_Slide_4.jpg",
   aboutHeroImage: "/About/HeroBannerImage.jpeg",
   contactHeroImage:

@@ -4,13 +4,9 @@ export default function CareersHero() {
   const c = company.careers;
 
   return (
-    <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden">
+    <section className="relative pt-48 pb-32 lg:pt-64 lg:pb-48 overflow-hidden">
       <div className="absolute inset-0">
-        <img
-          src="/Home/HeroHiringImage.png"
-          alt="Careers"
-          className="w-full h-full"
-        />
+        <img src="/ai4.png" alt="Careers" className="w-full h-full" />
         {/* Gradient overlay to make text readable on the left */}
         <div className="absolute inset-0" />
       </div>

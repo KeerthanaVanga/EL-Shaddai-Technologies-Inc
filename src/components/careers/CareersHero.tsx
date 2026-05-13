@@ -6,7 +6,7 @@ export default function CareersHero() {
   return (
     <section className="relative pt-48 pb-32 lg:pt-64 lg:pb-48 overflow-hidden">
       <div className="absolute inset-0">
-        <img src="/ai4.png" alt="Careers" className="w-full h-full" />
+        <img src="/el-sheddai_images/careers.png" alt="Careers" className="w-full h-full" />
         {/* Gradient overlay to make text readable on the left */}
         <div className="absolute inset-0" />
       </div>

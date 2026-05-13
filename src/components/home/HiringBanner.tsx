@@ -6,7 +6,7 @@ export default function HiringBanner() {
     <section className="relative h-64 sm:h-80 w-full overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 z-0">
         <img 
-          src="/Home/HeroHiringImage.png" 
+          src="/el-sheddai_images/View_Open_Positions.png" 
           alt="Office space with plants" 
           className="w-full h-full object-cover" 
         />

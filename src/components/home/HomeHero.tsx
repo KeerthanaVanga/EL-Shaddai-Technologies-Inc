@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { company } from "../../config/company";
 
 const carouselImages = [
-  company.heroImage,
-  company.hiringImage,
-  company.servicesHeroImage,
-  company.careersHeroImage,
+  "/el-sheddai_images/Banner1.png",
+  "/el-sheddai_images/Banner2.png",
+  "/el-sheddai_images/Banner3.png",
+  "/el-sheddai_images/16.png",
 ];
 
 export default function HomeHero() {

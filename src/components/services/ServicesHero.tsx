@@ -10,7 +10,7 @@ export default function ServicesHero() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-y-0 right-0 w-full lg:w-[60%]">
           <img
-            src="/elshaddai_images/Services_Page_Hero_Comprehensive_IT_Staffing_Services_.jpg"
+            src="/el-sheddai_images/ITStaffing_Services.jpg"
             alt="IT Staffing Services"
             className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
           />

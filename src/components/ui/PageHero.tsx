@@ -23,7 +23,7 @@ export default function PageHero({
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-y-0 right-0 w-full lg:w-[60%]">
             <img
-              src={bgImage}
+              src="/el-sheddai_images/Products_page.png"
               alt=""
               className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
             />

@@ -9,11 +9,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12 border-b border-white/10">
           <div>
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
-              <div className="relative w-7 h-7">
-                <div className="absolute inset-0 rotate-45 rounded-sm" style={{ backgroundColor: company.colors.primary }} />
-                <div className="absolute inset-1.5 rotate-45 rounded-sm" style={{ backgroundColor: company.colors.accent }} />
-              </div>
-              <span className="text-sm font-bold tracking-wider" style={{ color: company.colors.accent }}>{company.name}</span>
+              <img
+    src="/elsaddai.jpeg"
+    alt={company.name}
+    className="h-10 w-auto object-contain"
+  />
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">{company.footerDescription}</p>
             <div className="space-y-2.5">

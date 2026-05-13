@@ -7,8 +7,23 @@ export default function WhyUsHero() {
   return (
     <section
       className="relative overflow-hidden flex items-center justify-center pt-32 pb-20 lg:pt-40 lg:pb-28 min-h-125 lg:min-h-150"
-      style={{ backgroundColor: company.colors.dark }}
     >
+      {/* Background Image */}
+      <img
+        src="/el-sheddai_images/Building Partnerships That Last.png"
+        alt="Building Partnerships"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+      />
+
+      {/* Dark overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(13,17,23,0.85) 0%, rgba(13,17,23,0.65) 60%, rgba(139,26,26,0.25) 100%)",
+        }}
+      />
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 w-full">
         <FadeIn direction="up">
           <p
@@ -30,16 +45,6 @@ export default function WhyUsHero() {
           </p>
         </FadeIn>
       </div>
-
-      {/* Subtle background decoration */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-        }}
-      />
     </section>
   );
 }

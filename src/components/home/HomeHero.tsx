@@ -6,7 +6,7 @@ const carouselImages = [
   "/el-sheddai_images/Banner1.png",
   "/el-sheddai_images/Banner2.png",
   "/el-sheddai_images/Banner3.png",
-  "/el-sheddai_images/16.png",
+  "/el-sheddai_images/Your Strategic Talent Partner1.png",   
 ];
 
 export default function HomeHero() {
